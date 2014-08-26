@@ -1,0 +1,17 @@
+*.ko
+*.o
+*.mod.c
+CMakeFiles/
+*.cmake
+*.so
+*.order
+Makefile
+.tmp_versions/
+*.cmd
+*.swp
+CMakeCache.txt
+*.symvers
+_CPack_Packages/
+*.rpm
+*.deb
+install_manifest.txt
