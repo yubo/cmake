@@ -1,0 +1,5 @@
+# -*- Makefile -*-
+
+obj-m += hello.o
+
+hello-objs := kohello.o function.o
