@@ -11,8 +11,7 @@ find_path(KERNEL_SRCDIR Makefile PATHS
 message(STATUS "Kernel release: ${KERNEL_RELEASE}")
 message(STATUS "Kernel source: ${KERNEL_SRCDIR}")
 
-#set(CPACK_GENERATOR "DEB")
-set(CPACK_GENERATOR "RPM")
+set(CPACK_GENERATOR "RPM;DEB")
 set(CPACK_PACKAGE_NAME "cmake_example")
 set(CPACK_PACKAGE_CONTACT "yubo@yubo.org")
 set(CPACK_PACKAGE_VENDOR "yubo.org")
