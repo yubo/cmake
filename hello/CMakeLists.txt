@@ -5,14 +5,9 @@ PROJECT(kohello C)
 ADD_DEFINITIONS(-g -O2 -fsigned-char -freg-struct-return -Wall -W -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Winline -Werror)
 
 # Build the module
-EXECUTE_PROCESS(COMMAND uname -r
-                OUTPUT_VARIABLE os_release
-                OUTPUT_STRIP_TRAILING_WHITESPACE)
-SET(module_path /lib/modules/${os_release})
-SET(module_build_path ${module_path}/build)
 
 ADD_CUSTOM_COMMAND(OUTPUT hello.ko
-                   COMMAND make -C ${module_build_path} M=`pwd`
+	COMMAND make -C ${KERNEL_SRCDIR} M=${CMAKE_CURRENT_SOURCE_DIR}
                    DEPENDS kohello.c function.c
                    COMMENT "Building hello.ko"
                   )

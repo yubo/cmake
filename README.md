@@ -1,7 +1,15 @@
 # small example howto cmake
 
-## 带内核模块，需要安装kernel-devel
+## env
+```shell
+sudo apt-get install rpm
+```
 
-    cd build
-	cmake ..
-	make
+## 带内核模块，需要安装kernel-devel
+```shell
+cd build
+cmake ..
+make
+#build rpm;deb
+make package
+```
