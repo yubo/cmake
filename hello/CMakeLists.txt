@@ -16,7 +16,7 @@ ADD_CUSTOM_TARGET(kohello ALL DEPENDS hello.ko)
 
 
 # Installation of the module
-SET(module_install_path ${module_path}/kernel/extra/hello)
+SET(module_install_path /lib/modules/${KERNEL_RELEASE}/kernel/extra/hello)
 INSTALL(FILES hello.ko
         DESTINATION ${module_install_path}
         PERMISSIONS OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
