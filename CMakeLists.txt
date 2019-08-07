@@ -28,7 +28,7 @@ set(CPACK_RPM_PACKAGE_REQUIRES "")
 # DEBIAN
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.7)")
 
-include(scripts/general.cmake)
+include(scripts/util.cmake)
 
 if (${APP_NAME} STREQUAL "hello1" OR ${APP_NAME} STREQUAL "hello2")
 	add_subdirectory(cmd/${APP_NAME})

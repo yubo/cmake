@@ -40,19 +40,12 @@ else()
 	message(ERROR "unsupport arch ${CMAKE_SYSTEM_NAME}")
 endif()
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/misc/rpm/postinst.in
-		${CMAKE_CURRENT_BINARY_DIR}/rpm/postinst)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/misc/rpm/prerm.in
-		${CMAKE_CURRENT_BINARY_DIR}/rpm/prerm)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/misc/rpm/postrm.in
-		${CMAKE_CURRENT_BINARY_DIR}/rpm/postrm)
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/misc/deb/postinst.in
-		${CMAKE_CURRENT_BINARY_DIR}/deb/postinst)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/misc/deb/prerm.in
-		${CMAKE_CURRENT_BINARY_DIR}/deb/prerm)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/misc/deb/postrm.in
-		${CMAKE_CURRENT_BINARY_DIR}/deb/postrm)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/misc/rpm/postinst.in	${CMAKE_CURRENT_BINARY_DIR}/rpm/postinst)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/misc/rpm/prerm.in	${CMAKE_CURRENT_BINARY_DIR}/rpm/prerm)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/misc/rpm/postrm.in	${CMAKE_CURRENT_BINARY_DIR}/rpm/postrm)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/misc/deb/postinst.in	${CMAKE_CURRENT_BINARY_DIR}/deb/postinst)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/misc/deb/prerm.in	${CMAKE_CURRENT_BINARY_DIR}/deb/prerm)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/misc/deb/postrm.in	${CMAKE_CURRENT_BINARY_DIR}/deb/postrm)
  
 function(add_go_executable NAME)
 	FILE(GLOB GO_SOURCE RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "*.go")
