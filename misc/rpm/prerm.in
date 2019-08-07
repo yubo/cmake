@@ -1,9 +1,14 @@
 #!/bin/sh
 
+PATH=/usr/sbin:/usr/bin:${PATH}
+
 # errors shouldn't cause script to exit
 set +e
 
-echo pre rm ${APP_NAME}
+if [ "${1}" -eq 0 ]; then
+	systemctl --no-reload disable ${APP_NAME}.service > /dev/null 2>&1
+	systemctl stop ${APP_NAME}.service >/dev/null 2>&1
+fi
 
 # clear error termination state
 set -e

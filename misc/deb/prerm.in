@@ -1,9 +1,25 @@
 #!/bin/sh
+# https://www.debian.org/doc/debian-policy/ap-flowcharts.html
+
+PATH=/usr/sbin:/usr/bin:${PATH}
 
 # errors shouldn't cause script to exit
 set +e
 
-echo pre rm ${APP_NAME}
+case "$1" in
+	remove)
+		# do apt-get remove xxx
+		systemctl --no-reload disable ${APP_NAME}.service > /dev/null 2>&1
+		systemctl stop ${APP_NAME}.service >/dev/null 2>&1
+		;;
+	upgrade)
+		# do apt-get update xxx
+		;;
+	failed-upgrade|abort-upgrade)
+		;;
+	*)
+		;;
+esac
 
 # clear error termination state
 set -e

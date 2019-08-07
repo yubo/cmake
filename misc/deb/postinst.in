@@ -1,9 +1,50 @@
 #!/bin/sh
+# https://www.debian.org/doc/debian-policy/ap-flowcharts.html
+
+PATH=/usr/sbin:/usr/bin:${PATH}
 
 # errors shouldn't cause script to exit
 set +e
 
-echo post install ${APP_NAME}
+_install() {
+	getent group ${APP_GROUP} >/dev/null || \
+		groupadd -g ${APP_GID} -o -r ${APP_GROUP} >/dev/null 2>&1
+
+	getent passwd ${APP_USER} >/dev/null || \
+		useradd -M -N -g ${APP_GROUP} -o -r -d ${CMAKE_INSTALL_PREFIX} \
+		-s /sbin/nologin -c "${APP_NAME} Server" \
+		-u ${APP_UID} ${APP_USER} >/dev/null 2>&1
+
+	chown -R ${APP_USER}.${APP_GROUP} ${CMAKE_INSTALL_PREFIX}
+	systemctl preset ${APP_NAME}.service >/dev/null 2>&1
+	systemctl enable ${APP_NAME} >/dev/null 2>&1
+
+	echo "You can activate artifactory with:"
+	echo "> systemctl start ${APP_NAME}.service"
+	echo
+	echo "Then check the status with:"
+	echo "> systemctl status ${APP_NAME}.service"
+}
+
+_upgrade() {
+	chown -R ${APP_USER}:${APP_GROUP} ${CMAKE_INSTALL_PREFIX}
+	systemctl daemon-reload >/dev/null 2>&1
+	systemctl try-restart ${APP_NAME}.service >/dev/null 2>&1
+}
+
+case "$1" in
+	configure)
+		if [ -z "$2" ]; then
+    			# "after install" goes here
+			_install
+		else
+    			# "after upgrade" goes here
+			_upgrade
+		fi
+		;;
+	*)
+		;;
+esac
 
 # clear error termination state
 set -e
