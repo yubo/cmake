@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# errors shouldn't cause script to exit
+set +e
+
+echo post rm ${APP_NAME}
+
+# clear error termination state
+set -e

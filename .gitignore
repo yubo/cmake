@@ -2,7 +2,6 @@
 *.o
 *.mod.c
 CMakeFiles/
-*.cmake
 *.so
 *.order
 Makefile
@@ -15,3 +14,4 @@ _CPack_Packages/
 *.rpm
 *.deb
 install_manifest.txt
+build/

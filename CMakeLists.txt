@@ -1,34 +1,73 @@
-#
-# Copyright 2015 Xiaomi Corporation. All rights reserved.
-# Use of this source code is governed by a BSD-style
-# license that can be found in the LICENSE file.
-#
-# Authors:    Yu Bo <yubo@xiaomi.com>
-#
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.0)
+include(scripts/golang.cmake)
 
-execute_process(COMMAND uname -r
-	OUTPUT_VARIABLE KERNEL_RELEASE
-	OUTPUT_STRIP_TRAILING_WHITESPACE)
+# 设置项目名称
+project(demo NONE)
 
-find_path(KERNEL_SRCDIR Makefile PATHS
-	/lib/modules/${KERNEL_RELEASE}/source
-	/lib/modules/${KERNEL_RELEASE}/build)
+set(APP_NAME "hello1"     CACHE STRING "app name")
+set(CPACK_GENERATOR "RPM" CACHE STRING "RPM/DEB")
 
-message(STATUS "Kernel release: ${KERNEL_RELEASE}")
-message(STATUS "Kernel source: ${KERNEL_SRCDIR}")
 
-set(CPACK_GENERATOR "RPM;DEB")
-set(CPACK_PACKAGE_NAME "cmake_example")
+if (${APP_NAME} STREQUAL "hello1" OR ${APP_NAME} STREQUAL "hello2")
+	add_subdirectory(cmd/${APP_NAME})
+else()
+	message( FATAL_ERROR "You must set APP_NAME, CMake will exit." )
+endif()
+
+set(CMAKE_INSTALL_PREFIX /opt/${APP_NAME})
+
+install(DIRECTORY docs
+	USE_SOURCE_PERMISSIONS DESTINATION ${CMAKE_INSTALL_PREFIX})
+
+#set(EXECUTABLE_OUTPUT_PATH bin/)
+# https://cmake.org/cmake/help/v3.15/cpack_gen/deb.html#cpack_gen:CPack%20DEB%20Generator
+
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/misc/deb/postinst.in
+               ${CMAKE_CURRENT_BINARY_DIR}/deb/postinst)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/misc/deb/prerm.in
+               ${CMAKE_CURRENT_BINARY_DIR}/deb/prerm)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/misc/deb/postrm.in
+               ${CMAKE_CURRENT_BINARY_DIR}/deb/postrm)
+
+ 
+set(CPACK_PACKAGE_NAME ${APP_NAME})
+set(CPACK_PACKAGE_VERSION "0.1.2")
+set(CPACK_PACKAGE_RELEASE 1)
 set(CPACK_PACKAGE_CONTACT "yubo@yubo.org")
 set(CPACK_PACKAGE_VENDOR "yubo.org")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "cmake example - CPack Component Installation Example")
-set(CPACK_PACKAGE_VERSION "0.1.0")
 set(CPACK_PACKAGE_DESCRIPTION "cmake example")
-set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${KERNEL_RELEASE}-${CPACK_PACKAGE_VERSION}.${CMAKE_SYSTEM_PROCESSOR}")
-set(CPACK_RPM_CHANGELOG_FILE "${CMAKE_CURRENT_SOURCE_DIR}/ChangeLog")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "cmake example - CPack Component Installation Example")
 set(CPACK_PACKAGE_RELOCATABLE "")
-include(CPack)
+set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_SOURCE_DIR}/LICENSE)
+set(CPACK_RESOURCE_FILE_README ${CMAKE_SOURCE_DIR}/README.md)
+set(CPACK_PACKAGING_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
 
-add_subdirectory(hello)
-add_subdirectory(lib)
+
+
+# RPM
+set(CPACK_RPM_PACKAGE_SUMMARY "${CPACK_PACKAGE_NAME}")
+set(CPACK_RPM_PACKAGE_DESCRIPTION "${CPACK_PACKAGE_DESCRIPTION_SUMMARY}")
+set(CPACK_RPM_PACKAGE_GROUP "System Environment/Daemons")
+set(CPACK_RPM_PACKAGE_URL "http://www.yubo.org")
+set(CPACK_RPM_PACKAGE_LICENSE "BSD-3")
+set(CPACK_RPM_PACKAGE_REQUIRES "")
+# DEBIAN
+set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "${CPACK_PACKAGE_DESCRIPTION}\n ${PACKAGE_LONG_DESCRIPTION}")
+SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE ${CMAKE_SYSTEM_PROCESSOR})
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.7)")
+ 
+#set(CPACK_RPM_PRE_INSTALL_SCRIPT_FILE ${CMAKE_CURRENT_SOURCE_DIR}/pre_script.sh)
+#set(CPACK_RPM_PRE_UNINSTALL_SCRIPT_FILE ${CMAKE_CURRENT_SOURCE_DIR}/pre_script.sh)
+#set(CPACK_RPM_POST_INSTALL_SCRIPT_FILE ${CMAKE_CURRENT_SOURCE_DIR}/post_script.sh)
+#set(CPACK_RPM_POST_UNINSTALL_SCRIPT_FILE ${CMAKE_CURRENT_SOURCE_DIR}/post_script.sh)
+
+
+#https://github.com/rstudio/shiny-server/blob/master/CMakeLists.txt
+#
+
+
+
+#set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CPACK_PACKAGE_RELEASE}.${CMAKE_SYSTEM_NAME}.${CMAKE_SYSTEM_PROCESSOR}")
+
+include(CPack)
